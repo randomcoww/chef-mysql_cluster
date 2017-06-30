@@ -1,10 +1,10 @@
 module MysqlConfig
 
-  def to_ini(c)
+  def mysql_generate_config(c)
     ini_sections(c).join($/)
   end
 
-  def parse_options(options)
+  def mysql_parse_options(options)
     options.map do |k, v|
       case v
       when String,Integer

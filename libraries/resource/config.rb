@@ -10,7 +10,7 @@ class ChefMysqlCluster
 
       property :exists, [TrueClass, FalseClass]
       property :config, Hash
-      property :content, String, default: lazy { to_ini(config) }
+      property :content, String, default: lazy { mysql_generate_config(config) }
       property :path, String
     end
   end

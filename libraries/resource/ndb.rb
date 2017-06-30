@@ -10,7 +10,7 @@ class ChefMysqlCluster
 
       property :options, Hash, default: {}
       property :bin_path, String, default: '/usr/sbin/ndbd'
-      property :exec_command, String, default: lazy { "#{bin_path} #{parse_options(options)}" }
+      property :exec_command, String, default: lazy { "#{bin_path} #{mysql_parse_options(options)}" }
     end
   end
 end
