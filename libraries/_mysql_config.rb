@@ -1,56 +1,56 @@
-module MysqlConfig
+module MysqlHelper
 
-  def mysql_generate_config(c)
-    ini_sections(c).join($/)
-  end
-
-  def mysql_parse_options(options)
-    options.map do |k, v|
-      case v
-      when String,Integer
-        "--#{[k, v].join('=')}"
-      when NilClass
-        "--#{k}"
-      end
-    end.join(' ')
-  end
-
-
-  private
-
-  def ini_sections(c, res=[])
-    c.each_pair do |k, v|
-      case v
-      when Array
-        v.each do |j|
-          ini_sections({k => j}, res)
-        end
-
-      when Hash
-        res << "[#{k}]"
-        ini_options(v, res)
-        res << ""
-      end
+  class ConfigGenerator
+    def self.generate_from_hash(c)
+      g = new
+      g.ini_sections(c).join($/)
     end
-    res
-  end
 
-  def ini_options(c, res=[])
-    c.each_pair do |k, v|
-      case v
-      when Array
-        v.each do |j|
-          ini_options({k => j}, res)
+    def self.parse_options(options)
+      options.map do |k, v|
+        case v
+        when String,Integer
+          "--#{[k, v].join('=')}"
+        when NilClass
+          "--#{k}"
         end
+      end.join(' ')
+    end
 
-      when Hash
-        next
+    def ini_sections(c, res=[])
+      c.each_pair do |k, v|
+        case v
+        when Array
+          v.each do |j|
+            ini_sections({k => j}, res)
+          end
 
-      when NilClass
-        res << k
+        when Hash
+          res << "[#{k}]"
+          ini_options(v, res)
+          res << ""
+        end
+      end
+      res
+    end
 
-      else
-        res << [k, v].join('=')
+    def ini_options(c, res=[])
+      c.each_pair do |k, v|
+        case v
+        when Array
+          v.each do |j|
+            ini_options({k => j}, res)
+          end
+
+        when Hash
+          next
+
+        when NilClass
+          res << k
+
+        else
+          res << [k, v].join('=')
+        end
       end
     end
   end

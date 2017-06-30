@@ -1,7 +1,7 @@
 class ChefMysqlCluster
   class Resource
     class Config < Chef::Resource
-      include MysqlConfig
+      include MysqlHelper
 
       resource_name :mysql_cluster_config
 
@@ -10,7 +10,7 @@ class ChefMysqlCluster
 
       property :exists, [TrueClass, FalseClass]
       property :config, Hash
-      property :content, String, default: lazy { mysql_generate_config(config) }
+      property :content, String, default: lazy { ConfigGenerator.generate_from_hash(config) }
       property :path, String
     end
   end

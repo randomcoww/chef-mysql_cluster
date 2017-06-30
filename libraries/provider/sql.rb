@@ -1,7 +1,7 @@
 class ChefMysqlCluster
   class Provider
     class Sql < Chef::Provider
-      include MysqlConfig
+      include MysqlHelper
 
       provides :mysql_cluster_sql, os: "linux"
 
