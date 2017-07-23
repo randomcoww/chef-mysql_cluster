@@ -56,29 +56,18 @@ module MysqlHelper
   end
 
 
+  ## load mysql gem with lazy require
   class Client
-    def initialize(timeout, opts)
+    def initialize(opts)
       require 'mysql2'
 
-      Timeout::timeout(timeout) {
-        while true
-          begin
-            @client = Mysql2::Client.new(opts)
-            return
-          rescue Mysql2::Error
-            Chef::Log.info("Waiting #{timeout} seconds for hosts to come up...")
-          end
-          sleep 1
-        end
-      }
+      @client = Mysql2::Client.new(opts)
+    rescue Mysql2::Error
+      Chef::Log.info("Failed to connect to server")
     end
 
-    def query(sql, ignore_errors=false)
-      begin
-        @client.query(sql)
-      rescue Mysql2::Error => e
-        raise e unless ignore_errors
-      end
+    def query(sql)
+      @client.query(sql)
     end
   end
 end
