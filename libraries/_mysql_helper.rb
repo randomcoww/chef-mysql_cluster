@@ -57,12 +57,14 @@ module MysqlHelper
 
 
   ## load mysql gem with lazy require
-  class Client
+  class Wrapper
 
     def self.client(opts)
       require 'mysql2'
 
-      return Mysql2::Client.new(opts)
+      return Mysql2::Client.new(opts.merge(
+          flags: Mysql2::Client::MULTI_STATEMENTS
+        ))
     rescue Mysql2::Error
       Chef::Log.info("Failed to connect to server")
 
