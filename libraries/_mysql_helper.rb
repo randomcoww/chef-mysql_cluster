@@ -58,16 +58,15 @@ module MysqlHelper
 
   ## load mysql gem with lazy require
   class Client
-    def initialize(opts)
+
+    def self.client(opts)
       require 'mysql2'
 
-      @client = Mysql2::Client.new(opts)
+      return Mysql2::Client.new(opts)
     rescue Mysql2::Error
       Chef::Log.info("Failed to connect to server")
-    end
 
-    def query(sql)
-      @client.query(sql)
+      return nil
     end
   end
 end
